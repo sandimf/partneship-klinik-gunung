@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     // ===== /start =====
     if (text === "/start") {
       await sendTelegramMessage(
-        `Halo ${userName}! ˙⋆✮\n\nPerintah:\n` +
+        `Halo ${userName}! \n\nPerintah:\n` +
           `/start — Menu utama\n` +
           `/users — Daftar partner\n` +
           `/user [id] — Detail partner\n` +
