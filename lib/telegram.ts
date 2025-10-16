@@ -1,6 +1,6 @@
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN!;
 const TELEGRAM_CHAT_ID = "-1002911218423";
-const TELEGRAM_THREAD_ID = 16;
+const TELEGRAM_THREAD_ID = 519;
 
 export async function sendTelegramMessage(
   text: string,
