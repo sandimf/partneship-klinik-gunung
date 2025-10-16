@@ -42,8 +42,8 @@ export async function POST(req: Request) {
         `Halo ${userName}! ˙⋆✮\n\nPerintah:\n` +
           `/start — Menu utama\n` +
           `/users — Daftar partner\n` +
-          `/user <id> — Detail partner\n` +
-          `/adduser <name> <phone> — Tambah partner baru\n` +
+          `/user [id] — Detail partner\n` +
+          `/adduser [name] [phone] — Tambah partner baru\n` +
           `/cek — Status server\n` +
           `/laporan — Laporan pendaki\n` +
           `/web — Link web partnership`,
@@ -61,7 +61,7 @@ export async function POST(req: Request) {
 
       if (!newName || !phoneNew) {
         await sendTelegramMessage(
-          "Format salah. Gunakan /adduser <name> <phone>",
+          "Format salah. Gunakan /adduser [name] [phone]",
           chatId,
           threadId
         );
@@ -95,12 +95,13 @@ export async function POST(req: Request) {
     }
     if (text === "/web") {
     await sendTelegramMessage(
-        `<b>Web Partnership Klinik Gunung</b>\n` +
-        `<a href="https://partnership.ranupani.my.id">Click Me</a>`,
+        `<b>Web Partnership Klinik Gunung</b>\n\n` +
+        `<a href="https://partnership.ranupani.my.id">click me</a>\n\n` +
+        `url : https://partnership.ranupani.my.id`,
         chatId,
         threadId
     );
-    }
+}
 
     // ===== /users =====
     if (text === "/users") {
