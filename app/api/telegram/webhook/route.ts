@@ -94,9 +94,12 @@ export async function POST(req: Request) {
       );
     }
     if (text === "/web") {
-      await sendTelegramMessage(
-        "Web Partneship Klinik Gunung\n https://partnership.ranupani.my.id"
-      );
+    await sendTelegramMessage(
+        `<b>Web Partnership Klinik Gunung</b>\n` +
+        `<a href="https://partnership.ranupani.my.id">Click Me</a>`,
+        chatId,
+        threadId
+    );
     }
 
     // ===== /users =====
