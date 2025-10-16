@@ -10,9 +10,9 @@ datasource db {
 model OpenTripUser {
   id         Int         @id @default(autoincrement())
   createdAt  DateTime    @default(now())
-  email      String      @unique
+  phone      String?     // nomor telepon, bisa nullable
   name       String?
-  openTrips  OpenTrip[] 
+  openTrips  OpenTrip[]
 }
 
 model OpenTrip {

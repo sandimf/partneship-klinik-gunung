@@ -25,7 +25,7 @@ async function main() {
   const tripUser = await prisma.openTripUser.create({
     data: {
       name: "Alice",
-      email: "alice@login.com",
+      phone: "085162669347",
       openTrips: {
         create: [
           { tanggalScreening: new Date("2025-10-10"), jumlahPendaki: 5 },

@@ -43,8 +43,43 @@ export async function POST(req: Request) {
           `/start — Menu utama\n` +
           `/users — Daftar partner\n` +
           `/user <id> — Detail partner\n` +
+          `/adduser <name> <phone> — Tambah partner baru\n` +
           `/cek — Status server\n` +
-          `/laporan — Laporan pendaki`,
+          `/laporan — Laporan pendaki\n` +
+          `/web — Link web partnership`,
+        chatId,
+        threadId
+      );
+    }
+
+    // ===== /adduser <name> =====
+    if (text.startsWith("/adduser ")) {
+      const parts = text.split(" ");
+      parts.shift(); // hapus "/adduser"
+      const phoneNew = parts.pop(); // kata terakhir = phone
+      const newName = parts.join(" "); // sisanya = nama
+
+      if (!newName || !phoneNew) {
+        await sendTelegramMessage(
+          "Format salah. Gunakan /adduser <name> <phone>",
+          chatId,
+          threadId
+        );
+        return NextResponse.json({ ok: true });
+      }
+
+      const newUser = await prisma.openTripUser.create({
+        data: {
+          name: newName,
+          phone: phoneNew,
+        },
+      });
+
+      await sendTelegramMessage(
+        `Partner baru berhasil dibuat:\n` +
+          `<b>ID:</b> ${newUser.id}\n` +
+          `<b>Nama:</b> ${newUser.name}\n` +
+          `<b>Phone:</b> ${newUser.phone}`,
         chatId,
         threadId
       );
@@ -58,6 +93,11 @@ export async function POST(req: Request) {
         threadId
       );
     }
+    if (text === "/web") {
+      await sendTelegramMessage(
+        "Web Partneship Klinik Gunung\n https://partnership.ranupani.my.id"
+      );
+    }
 
     // ===== /users =====
     if (text === "/users") {
@@ -67,7 +107,11 @@ export async function POST(req: Request) {
       });
 
       if (!users.length) {
-        await sendTelegramMessage("Belum ada pengguna terdaftar.", chatId, threadId);
+        await sendTelegramMessage(
+          "Belum ada pengguna terdaftar.",
+          chatId,
+          threadId
+        );
         return NextResponse.json({ ok: true });
       }
 
@@ -75,8 +119,7 @@ export async function POST(req: Request) {
         .map((u) => `${u.id}. ${u.name || "(Tanpa Nama)"}`)
         .join("\n");
 
-      const messageText =
-        `˙⋆✮ <b>Daftar Pengguna</b>\n\n${userList}\n\nKetik <code>/user &lt;id&gt;</code> untuk melihat detail.`;
+      const messageText = `<b>Daftar Partner</b>\n\n${userList}\n\nKetik <code>/user &lt;id&gt;</code> untuk melihat detail.`;
 
       await sendTelegramMessage(messageText, chatId, threadId);
     }
@@ -87,7 +130,11 @@ export async function POST(req: Request) {
       const id = Number(parts[1]);
 
       if (isNaN(id)) {
-        await sendTelegramMessage("Format salah. Gunakan /user <id>", chatId, threadId);
+        await sendTelegramMessage(
+          "Format salah. Gunakan /user <id>",
+          chatId,
+          threadId
+        );
         return NextResponse.json({ ok: true });
       }
 
@@ -101,7 +148,11 @@ export async function POST(req: Request) {
       });
 
       if (!user) {
-        await sendTelegramMessage(`Pengguna dengan ID ${id} tidak ditemukan.`, chatId, threadId);
+        await sendTelegramMessage(
+          `Partner dengan ID ${id} tidak ditemukan.`,
+          chatId,
+          threadId
+        );
         return NextResponse.json({ ok: true });
       }
 
@@ -111,7 +162,7 @@ export async function POST(req: Request) {
       );
 
       const messageText =
-        `˙⋆✮ <b>Detail Pengguna</b>\n\n` +
+        `<b>Detail Partner</b>\n\n` +
         `<b>ID:</b> ${user.id}\n` +
         `<b>Nama:</b> ${user.name || "(Tanpa Nama)"}\n` +
         `<b>Total Pendaki:</b> ${totalPendaki}`;

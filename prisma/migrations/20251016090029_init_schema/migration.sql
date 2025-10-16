@@ -2,7 +2,7 @@
 CREATE TABLE "OpenTripUser" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "email" TEXT NOT NULL,
+    "phone" TEXT,
     "name" TEXT,
 
     CONSTRAINT "OpenTripUser_pkey" PRIMARY KEY ("id")
@@ -63,9 +63,6 @@ CREATE TABLE "VerificationToken" (
     "token" TEXT NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "OpenTripUser_email_key" ON "OpenTripUser"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
