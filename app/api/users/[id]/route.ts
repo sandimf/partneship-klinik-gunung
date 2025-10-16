@@ -1,16 +1,19 @@
-// app/api/users/[id]/trips/route.ts
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
 
-interface Params {
-  params: { id: string };
-}
-
-export async function GET(req: Request, { params }: Params) {
+export async function GET(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
-    const userId = Number(params.id);
+    const { id } = await context.params; // context.params adalah Promise
+    const userId = Number(id);
+
     if (isNaN(userId)) {
-      return NextResponse.json({ success: false, error: "Invalid user ID" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Invalid user ID" },
+        { status: 400 }
+      );
     }
 
     const user = await prisma.openTripUser.findUnique({
@@ -31,11 +34,17 @@ export async function GET(req: Request, { params }: Params) {
     });
 
     if (!user) {
-      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
+      return NextResponse.json(
+        { success: false, error: "User not found" },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json({ success: true, data: user });
   } catch (error) {
-    return NextResponse.json({ success: false, error: (error as Error).message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: (error as Error).message },
+      { status: 500 }
+    );
   }
 }
